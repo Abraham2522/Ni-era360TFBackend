@@ -2,6 +2,7 @@ package com.upc.ninera360.serviceimpl;
 
 import com.upc.ninera360.dtos.ResenasDTO;
 import com.upc.ninera360.entities.Resenas;
+import com.upc.ninera360.entities.Reservas;
 import com.upc.ninera360.repositories.ResenasRepositorio;
 import com.upc.ninera360.services.ResenasService;
 import jakarta.transaction.Transactional;
@@ -27,9 +28,15 @@ public class ResenasServiceImpl implements ResenasService {
             throw new RuntimeException(
                     "La reseña con ID " + resenasDTO.getIdResena() + " ya existe.");
         }
-
         Resenas resenas = modelMapper.map(resenasDTO, Resenas.class);
+        if (resenasDTO.getIdReserva() != null) {
+            Reservas reserva = new Reservas();
+            reserva.setIdReserva(resenasDTO.getIdReserva());
+            resenas.setReservas(reserva);
+        }
+
         resenas = resenasRepositorio.save(resenas);
+
         return modelMapper.map(resenas, ResenasDTO.class);
     }
 

@@ -79,11 +79,11 @@ public class SecurityConfig {
                                         "/",
                                         "/usuarios/**",
                                         "/reservas/**",
-                                        "/resenas",
-                                        "/mensajes",
-                                        "/cuidadores",
-                                        "/clientes",
-                                        "/chats"
+                                        "/resenas/**",
+                                        "/mensajes/**",
+                                        "/cuidadores/**",
+                                        "/clientes/**",
+                                        "/chats/**"
                                 ).permitAll()
                         //.requestMatchers("/api/authenticate", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         //.requestMatchers("/api/proveedores").hasRole("ADMIN")
