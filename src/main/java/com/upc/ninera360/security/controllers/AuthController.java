@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 
-@CrossOrigin(origins = "${ip.frontend}", allowCredentials = "true", exposedHeaders = "Authorization")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class AuthController {
