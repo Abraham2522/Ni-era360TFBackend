@@ -39,7 +39,7 @@ import org.springframework.web.filter.CorsFilter;
 )
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
@@ -93,7 +93,7 @@ public class SecurityConfig {
                 );
 
         // Añadir el filtro JWT antes del filtro de autenticación
-      // http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+      http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
