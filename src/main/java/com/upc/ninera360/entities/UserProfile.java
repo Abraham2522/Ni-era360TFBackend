@@ -16,12 +16,27 @@ import lombok.Setter;
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long idUsuario;
+
+    @Column(name = "nombre", length = 100, nullable = false)
     private String nombre;
-    private Integer dni;
+
+    @Column(name = "apellidos", length = 100, nullable = false)
+    private String apellidos;
+
+    @Column(name = "dni", length = 8, nullable = false, unique = true)
+    private String dni;
+
+    @Column(name = "direccion", length = 150, nullable = false)
     private String direccion;
-    private Integer telefono;
+
+    @Column(name = "telefono", length = 20, nullable = false)
+    private String telefono;
+
+    @Column(name = "correo", length = 100, nullable = false, unique = true)
     private String correo;
 
-
+    @Column(name = "activo", nullable = false)
+    private Boolean activo;
 }

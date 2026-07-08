@@ -1,12 +1,8 @@
 package com.upc.ninera360.serviceimpl;
 
 import com.upc.ninera360.dtos.MensajeDTO;
-import com.upc.ninera360.entities.Chat;
 import com.upc.ninera360.entities.Mensaje;
-import com.upc.ninera360.entities.UserProfile;
-import com.upc.ninera360.repositories.ChatRepository;
 import com.upc.ninera360.repositories.MensajeRepository;
-import com.upc.ninera360.repositories.UserProfileRepository;
 import com.upc.ninera360.services.MensajeService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -14,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MensajeServiceImpl implements MensajeService {
@@ -31,6 +26,11 @@ public class MensajeServiceImpl implements MensajeService {
         if (mensajeDTO.getIdMensaje() != null && mensajeRepository.existsById(mensajeDTO.getIdMensaje())) {
             throw new RuntimeException("El Mensaje con ID " + mensajeDTO.getIdMensaje() + " ya existe.");
         }
+
+        if (mensajeDTO.getLeido() == null) {
+            mensajeDTO.setLeido(false);
+        }
+
         Mensaje mensaje = modelMapper.map(mensajeDTO, Mensaje.class);
         mensaje = mensajeRepository.save(mensaje);
         return modelMapper.map(mensaje, MensajeDTO.class);

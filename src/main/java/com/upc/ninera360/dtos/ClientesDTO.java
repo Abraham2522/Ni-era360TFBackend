@@ -13,4 +13,7 @@ public class ClientesDTO {
     private Long idUsuario;
     private Long idCliente;
     private String descripcion;
+    private String direccion;
+    private String telefonoContacto;
+    private Boolean activo;
 }

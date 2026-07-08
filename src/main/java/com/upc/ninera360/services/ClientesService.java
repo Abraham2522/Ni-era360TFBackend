@@ -14,4 +14,5 @@ public interface ClientesService {
     public long count();
     //buscar por descripción
     public List<ClientesDTO> findByDescripcion(String descripcion);
+    ClientesDTO findByIdUsuario(Long idUsuario);
 }

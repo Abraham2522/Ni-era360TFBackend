@@ -17,12 +17,22 @@ import java.time.LocalDateTime;
 public class Resenas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_resena")
     private Long idResena;
-    private int calificacion;
+
+    @Column(name = "calificacion", length = 20, nullable = false)
+    private String calificacion;
+
+    @Column(name = "comentario", length = 500, nullable = false)
     private String comentario;
+
+    @Column(name = "creado_en", nullable = false)
     private LocalDateTime creadoEn;
 
+    @Column(name = "activo", nullable = false)
+    private Boolean activo;
+
     @ManyToOne
-    @JoinColumn(name="id_reserva")
+    @JoinColumn(name="id_reserva", nullable = false)
     private Reservas reservas;
 }

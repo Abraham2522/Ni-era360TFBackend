@@ -31,6 +31,11 @@ public class ChatServiceImpl implements ChatService {
         if (chatDTO.getIdChat() != null && chatRepository.existsById(chatDTO.getIdChat())) {
             throw new RuntimeException("El chat con ID " + chatDTO.getIdChat() + " ya existe.");
         }
+
+        if (chatDTO.getActivo() == null) {
+            chatDTO.setActivo(true);
+        }
+
         Chat chat = modelMapper.map(chatDTO, Chat.class);
         chat = chatRepository.save(chat);
         return modelMapper.map(chat, ChatDTO.class);

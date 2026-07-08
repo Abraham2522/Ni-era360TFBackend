@@ -15,5 +15,6 @@ public interface UserProfileService {
     public long count();
     // Buscar usuarios por nombre
     public List<UserProfileDTO> findByNombre(String nombre);
+    UserProfileDTO findByCorreo(String correo);
 }
 

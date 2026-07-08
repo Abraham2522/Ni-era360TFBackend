@@ -12,8 +12,10 @@ import lombok.Setter;
 public class UserProfileDTO {
     private Long idUsuario;
     private String nombre;
-    private Integer dni;
+    private String apellidos;
+    private String dni;
     private String direccion;
-    private Integer telefono;
+    private String telefono;
     private String correo;
+    private Boolean activo;
 }

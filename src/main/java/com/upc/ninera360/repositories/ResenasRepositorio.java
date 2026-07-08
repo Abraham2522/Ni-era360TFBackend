@@ -8,5 +8,5 @@ import java.util.List;
 public interface ResenasRepositorio extends JpaRepository<Resenas, Long> {
     public long count();
     // Buscar reseñas por calificación
-    public List<Resenas> findByCalificacion(int calificacion);
+    public List<Resenas> findByCalificacion(String calificacion);
 }

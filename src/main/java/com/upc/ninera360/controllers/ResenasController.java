@@ -45,7 +45,7 @@ public class ResenasController {
     }
     @GetMapping("/calificacion/{calificacion}")
     public List<ResenasDTO> findByCalificacion(
-            @PathVariable int calificacion) {
+            @PathVariable String calificacion) {
         return resenasService.findByCalificacion(calificacion);
     }
 }

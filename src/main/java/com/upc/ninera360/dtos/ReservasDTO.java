@@ -18,4 +18,6 @@ public class ReservasDTO {
     private OffsetDateTime horaInicio;
     private OffsetDateTime horaFin;
     private String estado;
+    private String direccionServicio;
+    private Boolean activo;
 }

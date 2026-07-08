@@ -13,4 +13,5 @@ public class ChatDTO {
     private Long idCliente;
     private Long idCuidador;
     private ZonedDateTime creadoEn;
+    private Boolean activo;
 }

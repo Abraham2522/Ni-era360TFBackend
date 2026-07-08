@@ -26,6 +26,12 @@ public class Mensaje {
     @JoinColumn(name = "id_usuario", nullable = false)
     private UserProfile usuario;
 
+    @Column(name = "contenido", length = 1000, nullable = false)
     private String contenido;
+
+    @Column(name = "fecha_envio", nullable = false)
     private ZonedDateTime fecha;
+
+    @Column(name = "leido", nullable = false)
+    private Boolean leido;
 }

@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
-    Optional<UserProfile> findByDni(Integer dni);
+    Optional<UserProfile> findByDni(String dni);
     public long count();
     public List<UserProfile> findByNombre(String nombre);
+    Optional<UserProfile> findByCorreo(String correo);
 
 }

@@ -1,10 +1,8 @@
 package com.upc.ninera360.controllers;
 
-import com.upc.ninera360.dtos.CuidadoresDTO;
 import com.upc.ninera360.dtos.MensajeDTO;
 import com.upc.ninera360.services.MensajeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

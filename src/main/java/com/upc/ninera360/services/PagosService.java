@@ -14,5 +14,5 @@ public interface PagosService  {
     // count
     public long count();
     // buscar por estado
-    public List<PagosDTO> findByEstadoPago(boolean estadoPago);
+    public List<PagosDTO> findByEstadoPago(Boolean estadoPago);
 }

@@ -26,8 +26,13 @@ public class UserProfileServiceImpl implements UserProfileService {
         if(userProfileDTO.getIdUsuario()!= null && userProfileRepository.existsById(userProfileDTO.getIdUsuario())){
             throw new RuntimeException("El usuario con ID" + userProfileDTO.getIdUsuario() + " ya existe");
         }
+
+        if (userProfileDTO.getActivo() == null) {
+            userProfileDTO.setActivo(true);
+        }
+
         UserProfile userProfile = modelMapper.map(userProfileDTO, UserProfile.class);
-        userProfile= userProfileRepository.save(userProfile);
+        userProfile = userProfileRepository.save(userProfile);
         return modelMapper.map(userProfile, UserProfileDTO.class);
     }
 
@@ -35,8 +40,8 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     public UserProfileDTO actualizar(UserProfileDTO userProfileDTO) {
         return userProfileRepository.findById(userProfileDTO.getIdUsuario())
-                .map(existing->{
-                    UserProfile userProfile = modelMapper.map(existing, UserProfile.class);
+                .map(existing -> {
+                    UserProfile userProfile = modelMapper.map(userProfileDTO, UserProfile.class);
                     return modelMapper.map(userProfileRepository.save(userProfile), UserProfileDTO.class);
                 })
                 .orElseThrow(() -> new RuntimeException(String.format("Usuario con ID %d no encontrado", userProfileDTO.getIdUsuario())));
@@ -90,7 +95,14 @@ public class UserProfileServiceImpl implements UserProfileService {
                                 UserProfileDTO.class))
                 .toList();
     }
+    @Override
+    public UserProfileDTO findByCorreo(String correo) {
 
+        UserProfile usuario = userProfileRepository.findByCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return modelMapper.map(usuario, UserProfileDTO.class);
+    }
 }
 
 

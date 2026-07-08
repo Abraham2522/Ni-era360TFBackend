@@ -26,6 +26,11 @@ public class ReservasServiceImpl implements ReservasService {
         if (reservasDTO.getIdReserva() != null && reservasRepositorio.existsById(reservasDTO.getIdReserva())) {
             throw new RuntimeException("La Reserva con ID " + reservasDTO.getIdReserva() + " ya existe.");
         }
+
+        if (reservasDTO.getActivo() == null) {
+            reservasDTO.setActivo(true);
+        }
+
         Reservas reservas = modelMapper.map(reservasDTO, Reservas.class);
         reservas = reservasRepositorio.save(reservas);
         return modelMapper.map(reservas, ReservasDTO.class);

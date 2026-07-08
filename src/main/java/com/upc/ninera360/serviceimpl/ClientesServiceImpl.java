@@ -1,9 +1,7 @@
 package com.upc.ninera360.serviceimpl;
 
 import com.upc.ninera360.dtos.ClientesDTO;
-import com.upc.ninera360.dtos.UserProfileDTO;
 import com.upc.ninera360.entities.Clientes;
-import com.upc.ninera360.entities.UserProfile;
 import com.upc.ninera360.repositories.ClientesRepositorio;
 import com.upc.ninera360.services.ClientesService;
 import org.modelmapper.ModelMapper;
@@ -27,6 +25,11 @@ public class ClientesServiceImpl implements ClientesService {
         if (clientesDTO.getIdCliente() != null && clientesRepositorio.existsById(clientesDTO.getIdCliente())) {
             throw new RuntimeException("El cliente con ID" + clientesDTO.getIdCliente() + " ya existe");
         }
+
+        if (clientesDTO.getActivo() == null) {
+            clientesDTO.setActivo(true);
+        }
+
         Clientes clientes = modelMapper.map(clientesDTO, Clientes.class);
         clientes = clientesRepositorio.save(clientes);
         return modelMapper.map(clientes, ClientesDTO.class);
@@ -37,7 +40,7 @@ public class ClientesServiceImpl implements ClientesService {
     public ClientesDTO actualizarCliente(ClientesDTO clientesDTO) {
         return clientesRepositorio.findById(clientesDTO.getIdCliente())
                 .map(existing -> {
-                    Clientes clientes = modelMapper.map(existing, Clientes.class);
+                    Clientes clientes = modelMapper.map(clientesDTO, Clientes.class);
                     return modelMapper.map(clientesRepositorio.save(clientes), ClientesDTO.class);
                 })
                 .orElseThrow(() -> new RuntimeException(String.format("Cliente con ID %d no encontrado", clientesDTO.getIdCliente())));
@@ -91,5 +94,13 @@ public class ClientesServiceImpl implements ClientesService {
         return lista.stream()
                 .map(c -> modelMapper.map(c, ClientesDTO.class))
                 .toList();
+    }
+    @Override
+    public ClientesDTO findByIdUsuario(Long idUsuario) {
+
+        Clientes cliente = clientesRepositorio.findByUsuario_IdUsuario(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        return modelMapper.map(cliente, ClientesDTO.class);
     }
 }

@@ -42,12 +42,12 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // LLENANDO EL PAYLOAD
-        claims.put("name", userDetails.getUsername()); // o nombre real
-        claims.put("email", "cflores@praczis.com");
-        claims.put("role", "ADMIN");
-        claims.put("department", "IT");
-        claims.put("custom_id", 2025);
+
+        claims.put("roles", userDetails.getAuthorities()
+                .stream()
+                .map(a -> a.getAuthority())
+                .toList());
+
         return createToken(claims, userDetails.getUsername());
     }
 

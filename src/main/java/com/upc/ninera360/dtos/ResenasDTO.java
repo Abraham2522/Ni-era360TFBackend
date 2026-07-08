@@ -13,8 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ResenasDTO {
     private Long idResena;
-    private int calificacion;
+    private String calificacion;
     private String comentario;
     private LocalDateTime creadoEn;
+    private Boolean activo;
     private Long idReserva;
+
 }

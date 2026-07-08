@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -12,7 +15,8 @@ import lombok.Setter;
 public class PagosDTO {
     private Long idPago;
     private Long idReserva;
-    private String montoPago;
-    private boolean estadoPago;
-    private String pagada_en;
+    private BigDecimal montoPago;
+    private Boolean estadoPago;
+    private LocalDateTime pagadaEn;
+    private String metodoPago;
 }

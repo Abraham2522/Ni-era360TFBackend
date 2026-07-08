@@ -37,15 +37,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-
-        // BYPASS ENDPOINTS PUBLICOS (CLAVE PARA AWS Y 403)
-        if (path.startsWith("/api/authenticate")
-                || path.startsWith("/v3/api-docs")
-                || path.startsWith("/swagger-ui")
-                || path.equals("/")
-                || path.startsWith("/error")) {
-
+        String path = request.getServletPath();
+        if (
+                "OPTIONS".equals(request.getMethod()) ||
+                        path.startsWith("/api/authenticate") ||
+                        path.startsWith("/usuarios") ||
+                        path.startsWith("/clientes") ||
+                        path.startsWith("/cuidadores") ||
+                        path.startsWith("/reservas") ||
+                        path.startsWith("/resenas") ||
+                        path.startsWith("/mensajes") ||
+                        path.startsWith("/pagos") ||
+                        path.startsWith("/chats") ||
+                        path.startsWith("/v3/api-docs") ||
+                        path.startsWith("/swagger-ui") ||
+                        path.startsWith("/error") ||
+                        path.equals("/") ||
+                        path.startsWith("/api/register-cuidador") ||
+                        path.startsWith("/api/register-cliente")
+        ) {
             chain.doFilter(request, response);
             return;
         }

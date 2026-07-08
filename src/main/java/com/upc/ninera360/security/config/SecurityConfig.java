@@ -1,12 +1,10 @@
 package com.upc.ninera360.security.config;
-
 import com.upc.ninera360.security.filters.JwtRequestFilter;
 import com.upc.ninera360.security.services.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -68,51 +66,70 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // deshabilitar CSRF ya que no es necesario para una API REST
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(
-                                        "/api/authenticate",
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html",
-                                        "/pagos/**",
-                                        "/",
-                                        "/usuarios/**",
-                                        "/reservas/**",
-                                        "/resenas/**",
-                                        "/mensajes/**",
-                                        "/cuidadores/**",
-                                        "/clientes/**",
-                                        "/chats/**"
-                                ).permitAll()
-                        //.requestMatchers("/api/authenticate", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        //.requestMatchers("/api/proveedores").hasRole("ADMIN")
-                        .anyRequest().authenticated() // cualquier endpoint puede ser llamado con tan solo autenticarse
-                        //.anyRequest().denyAll() // aquí se obliga a todos los endpoints usen @PreAuthorize
+                        .requestMatchers(
+                                "/api/authenticate",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/pagos/**",
+                                "/",
+                                "/usuarios/**",
+                                "/reservas/**",
+                                "/resenas/**",
+                                "/mensajes/**",
+                                "/cuidadores/**",
+                                "/clientes/**",
+                                "/chats/**",
+                                "/api/register-cuidador",
+                                "/api/register-cliente",
+                                "/api/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
         // Añadir el filtro JWT antes del filtro de autenticación
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+       http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(false);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
     }
     //Filter opcional si se desea configurar globalmente el acceso a los endpoints sin anotaciones
     // en cada endpoint y adicionar mas configuraciones CORS
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
-    public CorsFilter corsFilter(@Value("${ip.frontend}") String frontendUrl) {
+    public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin(frontendUrl);           // o addAllowedOriginPattern
+
+        config.setAllowCredentials(false);
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return new CorsFilter(source);
     }
 }

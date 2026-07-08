@@ -12,6 +12,6 @@ public interface ResenasService {
     public List<ResenasDTO> listarResenas();
     public ResenasDTO buscarPorId(long id);
     public long count();
-    public List<ResenasDTO> findByCalificacion(int calificacion);
+    public List<ResenasDTO> findByCalificacion(String calificacion);
 }
 

@@ -5,13 +5,13 @@ import com.upc.ninera360.dtos.CuidadoresDTO;
 import java.util.List;
 
 public interface CuidadoresService {
-    public CuidadoresDTO insertarCuidador(CuidadoresDTO cuidadoresDTO);
-    public CuidadoresDTO actualizarCuidador(CuidadoresDTO cuidadoresDTO);
-    public void eliminarCuidador(long id);
-    public List<CuidadoresDTO> listarCuidadores();
-    public CuidadoresDTO buscarPorId(long id);
-    // count
-    public long count();
-    // buscar por descripcion
-    public List<CuidadoresDTO> findByDescripcion(String descripcion);
+
+    CuidadoresDTO insertarCuidador(CuidadoresDTO cuidadoresDTO);
+    CuidadoresDTO actualizarCuidador(CuidadoresDTO cuidadoresDTO);
+    void eliminarCuidador(long id);
+    List<CuidadoresDTO> listarCuidadores();
+    CuidadoresDTO buscarPorId(long id);
+    long count();
+    List<CuidadoresDTO> findByDescripcion(String descripcion);
+    CuidadoresDTO findByIdUsuario(Long idUsuario);
 }

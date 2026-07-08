@@ -14,4 +14,5 @@ public class MensajeDTO {
     private Long idUsuario;
     private String contenido;
     private ZonedDateTime fecha;
+    private Boolean leido;
 }

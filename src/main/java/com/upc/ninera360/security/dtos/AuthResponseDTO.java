@@ -1,10 +1,14 @@
 package com.upc.ninera360.security.dtos;
 
+import com.upc.ninera360.dtos.ResenasDTO;
+import lombok.Data;
+import java.util.List;
 
-import java.util.Set;
-
-@lombok.Data
+@Data
 public class AuthResponseDTO {
     private String jwt;
-    private Set<String> roles;
+    private List<String> roles;
+    private Long idUsuario;
+    private Long idCliente;
+    private Long idCuidador;
 }

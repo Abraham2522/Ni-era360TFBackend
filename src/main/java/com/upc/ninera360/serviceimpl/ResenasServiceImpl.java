@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import java.util.List;
 
@@ -28,7 +30,14 @@ public class ResenasServiceImpl implements ResenasService {
             throw new RuntimeException(
                     "La reseña con ID " + resenasDTO.getIdResena() + " ya existe.");
         }
+
+        if (resenasDTO.getActivo() == null) {
+            resenasDTO.setActivo(true);
+        }
+
         Resenas resenas = modelMapper.map(resenasDTO, Resenas.class);
+        resenas.setCreadoEn(LocalDateTime.now(ZoneId.of("America/Lima")));
+
         if (resenasDTO.getIdReserva() != null) {
             Reservas reserva = new Reservas();
             reserva.setIdReserva(resenasDTO.getIdReserva());
@@ -46,15 +55,25 @@ public class ResenasServiceImpl implements ResenasService {
 
         return resenasRepositorio.findById(resenasDTO.getIdResena())
                 .map(existing -> {
-                    Resenas resenas = modelMapper.map(resenasDTO, Resenas.class);
-                    return modelMapper.map(
-                            resenasRepositorio.save(resenas),
-                            ResenasDTO.class);
+
+                    if (resenasDTO.getCalificacion() != null) {
+                        existing.setCalificacion(resenasDTO.getCalificacion());
+                    }
+
+                    if (resenasDTO.getComentario() != null) {
+                        existing.setComentario(resenasDTO.getComentario());
+                    }
+
+                    if (resenasDTO.getActivo() != null) {
+                        existing.setActivo(resenasDTO.getActivo());
+                    }
+
+                    Resenas actualizado = resenasRepositorio.save(existing);
+                    return modelMapper.map(actualizado, ResenasDTO.class);
                 })
                 .orElseThrow(() -> new RuntimeException(
-                        String.format(
-                                "Reseña con ID %d no encontrada",
-                                resenasDTO.getIdResena())));
+                        "Reseña con ID " + resenasDTO.getIdResena() + " no encontrada"
+                ));
     }
 
     @Transactional
@@ -71,16 +90,33 @@ public class ResenasServiceImpl implements ResenasService {
     public List<ResenasDTO> listarResenas() {
         return resenasRepositorio.findAll()
                 .stream()
-                .map(resenas -> modelMapper.map(resenas, ResenasDTO.class))
+                .map(resenas -> {
+                    ResenasDTO dto = modelMapper.map(resenas, ResenasDTO.class);
+
+                    if (resenas.getReservas() != null) {
+                        dto.setIdReserva(resenas.getReservas().getIdReserva());
+                    }
+
+                    return dto;
+                })
                 .toList();
     }
 
     @Override
     public ResenasDTO buscarPorId(long id) {
         return resenasRepositorio.findById(id)
-                .map(resenas -> modelMapper.map(resenas, ResenasDTO.class))
+                .map(resenas -> {
+                    ResenasDTO dto = modelMapper.map(resenas, ResenasDTO.class);
+
+                    if (resenas.getReservas() != null) {
+                        dto.setIdReserva(resenas.getReservas().getIdReserva());
+                    }
+
+                    return dto;
+                })
                 .orElseThrow(() -> new RuntimeException(
-                        "Reseña no encontrada con ID: " + id));
+                        "Reseña no encontrada con ID: " + id
+                ));
     }
     @Override
     public long count() {
@@ -92,13 +128,15 @@ public class ResenasServiceImpl implements ResenasService {
     }
 
     @Override
-    public List<ResenasDTO> findByCalificacion(int calificacion) {
+    public List<ResenasDTO> findByCalificacion(String calificacion) {
         List<Resenas> lista =
                 resenasRepositorio.findByCalificacion(calificacion);
+
         if (lista.isEmpty()) {
             throw new RuntimeException(
                     "No existen reseñas con esa calificación");
         }
+
         return lista.stream()
                 .map(r -> modelMapper.map(r, ResenasDTO.class))
                 .toList();

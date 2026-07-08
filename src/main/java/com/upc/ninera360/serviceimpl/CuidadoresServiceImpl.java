@@ -25,6 +25,11 @@ public class CuidadoresServiceImpl implements CuidadoresService {
         if (cuidadoresDTO.getIdCuidador() != null && cuidadoresRepositorio.existsById(cuidadoresDTO.getIdCuidador())) {
             throw new RuntimeException("El cuidador con ID" + cuidadoresDTO.getIdCuidador() + " ya existe");
         }
+
+        if (cuidadoresDTO.getActivo() == null) {
+            cuidadoresDTO.setActivo(true);
+        }
+
         Cuidadores cuidadores = modelMapper.map(cuidadoresDTO, Cuidadores.class);
         cuidadores = cuidadoresRepositorio.save(cuidadores);
         return modelMapper.map(cuidadores, CuidadoresDTO.class);
@@ -35,7 +40,7 @@ public class CuidadoresServiceImpl implements CuidadoresService {
     public CuidadoresDTO actualizarCuidador(CuidadoresDTO cuidadoresDTO) {
         return cuidadoresRepositorio.findById(cuidadoresDTO.getIdCuidador())
                 .map(existing -> {
-                    Cuidadores cuidadores = modelMapper.map(existing, Cuidadores.class);
+                    Cuidadores cuidadores = modelMapper.map(cuidadoresDTO, Cuidadores.class);
                     return modelMapper.map(cuidadoresRepositorio.save(cuidadores), CuidadoresDTO.class);
                 })
                 .orElseThrow(() -> new RuntimeException(String.format("El cuidador con ID %d no encontrado", cuidadoresDTO.getIdCuidador())));
@@ -44,7 +49,7 @@ public class CuidadoresServiceImpl implements CuidadoresService {
     @Transactional
     @Override
     public void eliminarCuidador(long id) {
-        if (cuidadoresRepositorio.existsById(id)) {
+        if (!cuidadoresRepositorio.existsById(id)) {
             throw new RuntimeException("Cuidador no encontrado con ID:" + id);
         }
         cuidadoresRepositorio.deleteById(id);
@@ -54,7 +59,15 @@ public class CuidadoresServiceImpl implements CuidadoresService {
     public List<CuidadoresDTO> listarCuidadores() {
         return cuidadoresRepositorio.findAll()
                 .stream()
-                .map(cuidadores -> modelMapper.map(cuidadores, CuidadoresDTO.class))
+                .map(cuidadores -> {
+                    CuidadoresDTO dto = modelMapper.map(cuidadores, CuidadoresDTO.class);
+
+                    dto.setIdUsuario(cuidadores.getUsuario().getIdUsuario());
+                    dto.setNombre(cuidadores.getUsuario().getNombre());
+                    dto.setApellidos(cuidadores.getUsuario().getApellidos());
+
+                    return dto;
+                })
                 .toList();
     }
 
@@ -83,6 +96,21 @@ public class CuidadoresServiceImpl implements CuidadoresService {
         return lista.stream()
                 .map(c -> modelMapper.map(c, CuidadoresDTO.class))
                 .toList();
+    }
+    @Override
+    public CuidadoresDTO findByIdUsuario(Long idUsuario) {
+        Cuidadores cuidador = cuidadoresRepositorio.findByUsuario_IdUsuario(idUsuario)
+                .orElseThrow(() -> new RuntimeException(
+                        "Cuidador no encontrado para usuario: " + idUsuario
+                ));
+
+        CuidadoresDTO dto = modelMapper.map(cuidador, CuidadoresDTO.class);
+
+        dto.setIdUsuario(cuidador.getUsuario().getIdUsuario());
+        dto.setNombre(cuidador.getUsuario().getNombre());
+        dto.setApellidos(cuidador.getUsuario().getApellidos());
+
+        return dto;
     }
 }
 

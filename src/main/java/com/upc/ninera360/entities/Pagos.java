@@ -16,15 +16,25 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="pagos")
 public class Pagos {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_pago")
     private Long idPago;
+
+    @Column(name = "monto_pago", nullable = false)
     private BigDecimal montoPago;
-    private boolean estadoPago;
+
+    @Column(name = "estado_pago", nullable = false)
+    private Boolean estadoPago;
+
+    @Column(name = "pagada_en", nullable = false)
     private LocalDateTime pagadaEn;
-    
-   @ManyToOne
-   @JoinColumn(name="id_reserva")
-   private Reservas reservas;
+
+    @Column(name = "metodo_pago", length = 50, nullable = false)
+    private String metodoPago;
+
+    @ManyToOne
+    @JoinColumn(name="id_reserva", nullable = false)
+    private Reservas reservas;
 }

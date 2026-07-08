@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -18,9 +20,22 @@ public class Clientes {
     @Column(name = "id_cliente")
     private Long idCliente;
 
+    @Column(name = "descripcion", length = 500)
     private String descripcion;
 
+    @Column(name = "direccion", length = 150, nullable = false)
+    private String direccion;
+
+    @Column(name = "telefono_contacto", length = 20, nullable = false)
+    private String telefonoContacto;
+
+    @Column(name = "activo", nullable = false)
+    private Boolean activo;
+
     @OneToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private UserProfile usuario;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Chat> chats;
 }
